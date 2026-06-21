@@ -17,7 +17,7 @@
 
 var SPREADSHEET_ID = '1gHdvo516l0GzaD6lMRINq0-gBs-ISFdjsgXZzHiiGYM';
 var SHEET_GID = 514390863;                 // a aba que está no teu link (#gid=...)
-var NOTIFY_EMAIL = 'marketing@amuncafe.com';
+var NOTIFY_EMAIL = 'marketing@amuncafe.com, contato@galeriaoliveira.art';
 
 // Ordem das colunas — IGUAL ao teu appendRow (language fica em último).
 var FIELDS = [
