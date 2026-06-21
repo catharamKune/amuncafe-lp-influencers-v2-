@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formulário de Parceria — AMUN Café</title>
+  <meta name="description" content="Candidatura de criadores de conteúdo para colaborar com o AMUN Café, Príncipe Real, Lisboa." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #FAF8F5;
+      --surface:     #FFFFFF;
+      --ink:         #211C16;
+      --muted:       #8B8275;
+      --line:        #ECE5DB;
+      --line-soft:   #F1ECE4;
+      --accent:      #9A7B4F;
+      --accent-deep: #6F5733;
+      --accent-soft: #F4EEE5;
+      --sage:        #EEF1EA;
+      --error:       #B5654A;
+      --error-soft:  rgba(181,101,74,0.12);
+      --radius:      14px;
+      --radius-sm:   10px;
+      --shadow:      0 1px 2px rgba(33,28,22,0.04);
+      --shadow-soft: 0 6px 24px -12px rgba(33,28,22,0.18);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    ::selection { background: var(--accent-soft); }
+
+    /* ─── Sticky Header ─── */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250,248,245,0.85);
+      backdrop-filter: saturate(180%) blur(12px);
+      -webkit-backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .site-logo {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 17px;
+      color: var(--ink);
+      letter-spacing: 0.01em;
+    }
+
+    /* ─── Language Toggle ─── */
+    .lang-toggle {
+      display: flex;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .lang-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      background: transparent;
+      color: var(--muted);
+      transition: background-color 0.18s ease, color 0.18s ease;
+    }
+
+    .lang-btn.active { background: var(--accent); color: #fff; }
+    .lang-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    /* ─── Main Wrapper ─── */
+    .main {
+      position: relative;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 22px 90px;
+    }
+
+    /* ─── Hero ─── */
+    .hero {
+      text-align: center;
+      padding: 64px 0 36px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      padding: 6px 14px;
+      margin-bottom: 22px;
+    }
+
+    .hero-title {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(33px, 7vw, 46px);
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 18px;
+      letter-spacing: -0.015em;
+    }
+
+    .hero-sub {
+      font-size: 15.5px;
+      color: var(--muted);
+      max-width: 440px;
+      margin: 0 auto 30px;
+      line-height: 1.68;
+    }
+
+    .scroll-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 10.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0.75;
+    }
+    .scroll-hint .arrow { animation: bob 1.8s ease-in-out infinite; }
+    @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+
+    /* ─── Section Layout ─── */
+    .form-section {
+      margin-bottom: 6px;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .form-section.visible { opacity: 1; transform: translateY(0); }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 30px 2px 14px;
+    }
+
+    .section-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ─── Cards ─── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 26px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line-soft);
+      transition: box-shadow 0.25s ease;
+    }
+    .card:focus-within { box-shadow: var(--shadow-soft); }
+
+    /* ─── Form Grid ─── */
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 520px) { .field-grid { grid-template-columns: 1fr; } }
+
+    .field-group { display: flex; flex-direction: column; gap: 7px; }
+    .field-group + .field-group,
+    .field-grid + .field-group,
+    .field-group + .field-grid { margin-top: 16px; }
+    /* field-groups inside a grid get spacing from the grid gap, not the
+       adjacent-sibling margin (which would offset the 2nd column). */
+    .field-grid > .field-group { margin-top: 0; }
+
+    label {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: 0.01em;
+      line-height: 1.4;
+    }
+    .label-optional { font-weight: 400; color: var(--muted); font-size: 11px; margin-left: 3px; }
+
+    /* ─── Inputs ─── */
+    input[type="text"], input[type="email"], input[type="tel"],
+    input[type="number"], input[type="url"], input[type="date"],
+    select, textarea {
+      width: 100%;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14.5px;
+      color: var(--ink);
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    input[type="date"] { cursor: pointer; }
+    input::placeholder, textarea::placeholder { color: var(--muted); opacity: 0.7; }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      background: var(--surface);
+      box-shadow: 0 0 0 3px rgba(154,123,79,0.12);
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238B8275' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 38px;
+      cursor: pointer;
+    }
+    textarea { resize: vertical; min-height: 104px; line-height: 1.55; }
+
+    /* Error state */
+    .has-error input, .has-error select, .has-error textarea {
+      border-color: var(--error);
+      box-shadow: 0 0 0 3px var(--error-soft);
+    }
+    .error-msg { font-size: 12px; color: var(--error); display: none; }
+    .has-error .error-msg { display: block; }
+
+    /* ─── Pill Checkboxes ─── */
+    .pill-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill-label { display: inline-flex; cursor: pointer; }
+    .pill-label input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
+    .pill-text {
+      display: inline-block;
+      font-size: 13px;
+      padding: 8px 16px;
+      border-radius: 100px;
+      border: 1px solid var(--line);
+      background: var(--bg);
+      color: var(--ink);
+      cursor: pointer;
+      transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+      user-select: none;
+    }
+    .pill-label input:checked + .pill-text { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .pill-label:hover .pill-text { border-color: var(--accent); }
+    .pill-label input:focus-visible + .pill-text { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .pill-error-msg { font-size: 12px; color: var(--error); display: none; margin-top: 7px; }
+    .pill-group-wrap.has-error .pill-error-msg { display: block; }
+
+    /* ─── Radio Cards (Guest count) ─── */
+    .radio-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .radio-card-label { cursor: pointer; position: relative; }
+    .radio-card-label input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .radio-card-inner {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 7px; padding: 18px 16px; border-radius: var(--radius-sm);
+      border: 1.5px solid var(--line); background: var(--bg);
+      transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+      text-align: center;
+    }
+    .radio-card-label input:checked + .radio-card-inner {
+      background: var(--accent); border-color: var(--accent); color: #fff;
+      box-shadow: 0 4px 14px -6px rgba(154,123,79,0.5);
+    }
+    .radio-card-label:hover .radio-card-inner { border-color: var(--accent); }
+    .radio-card-label input:focus-visible + .radio-card-inner { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .radio-card-icon { font-size: 22px; line-height: 1; }
+    .radio-card-num { font-size: 17px; font-weight: 600; line-height: 1; }
+    .radio-card-text { font-size: 12.5px; color: inherit; opacity: 0.85; }
+
+    .radio-cards-wrap.has-error .radio-card-inner { border-color: var(--error); }
+    .radio-cards-wrap.has-error .radio-error-msg { display: block; }
+    .radio-error-msg { font-size: 12px; color: var(--error); display: none; margin-top: 8px; }
+
+    /* ─── Info Box ─── */
+    .info-box {
+      background: var(--sage);
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
+      font-size: 13px;
+      color: var(--ink);
+      line-height: 1.62;
+      margin-bottom: 22px;
+    }
+    .info-box-icon { color: var(--accent); margin-right: 6px; font-weight: 600; }
+
+    /* ─── Agreement Checkboxes ─── */
+    .agree-intro { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.55; }
+    .agree-list { display: flex; flex-direction: column; gap: 14px; }
+    .agree-item { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+    .agree-item input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .agree-box {
+      width: 19px; height: 19px; min-width: 19px; border-radius: 5px;
+      border: 1.5px solid var(--line); background: var(--bg);
+      display: flex; align-items: center; justify-content: center; margin-top: 1px;
+      transition: background-color 0.18s ease, border-color 0.18s ease; flex-shrink: 0;
+    }
+    .agree-item input:checked ~ .agree-box { background: var(--accent); border-color: var(--accent); }
+    .agree-item input:checked ~ .agree-box::after {
+      content: ''; display: block; width: 10px; height: 6px;
+      border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translateY(-1px);
+    }
+    .agree-item:hover .agree-box { border-color: var(--accent); }
+    .agree-item input:focus-visible ~ .agree-box { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .agree-text { font-size: 13px; line-height: 1.55; color: var(--ink); }
+    .agree-group.has-error .agree-box { border-color: var(--error); }
+    .agree-group .error-msg { font-size: 12px; color: var(--error); display: none; margin-top: 4px; margin-left: 31px; }
+    .agree-group.has-error .error-msg { display: block; }
+
+    /* ─── Submit Button ─── */
+    .submit-wrap { margin-top: 34px; }
+    .btn-submit {
+      width: 100%;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 500; letter-spacing: 0.02em;
+      color: #fff; background: var(--accent);
+      border: none; border-radius: 100px; padding: 17px 32px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px;
+      transition: background-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
+    }
+    .btn-submit:hover { background: var(--accent-deep); box-shadow: 0 8px 22px -10px rgba(111,87,51,0.6); }
+    .btn-submit:active { transform: translateY(1px); }
+    .btn-submit:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+    .btn-arrow { font-size: 18px; }
+
+    .submit-note { text-align: center; font-size: 11.5px; color: var(--muted); margin-top: 14px; line-height: 1.5; }
+
+    /* Spinner */
+    .spinner {
+      width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; display: none;
+    }
+    .btn-submit.loading .spinner { display: block; }
+    .btn-submit.loading .btn-text { opacity: 0.75; }
+    .btn-submit.loading .btn-arrow { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── Footer ─── */
+    .site-footer { text-align: center; padding: 34px 24px 26px; font-size: 12px; color: var(--muted); line-height: 1.7; }
+    .footer-brand { font-family: 'DM Serif Display', serif; font-size: 15px; color: var(--ink); display: block; margin-bottom: 5px; }
+
+    /* ─── Success State ─── */
+    .success-overlay {
+      display: none; position: fixed; inset: 0; background: var(--bg);
+      z-index: 200; align-items: center; justify-content: center; flex-direction: column;
+      text-align: center; padding: 40px; animation: fadeIn 0.4s ease;
+    }
+    .success-overlay.show { display: flex; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .success-icon {
+      width: 64px; height: 64px; border-radius: 50%; background: var(--accent-soft);
+      display: flex; align-items: center; justify-content: center; font-size: 30px; margin-bottom: 22px;
+    }
+    .success-title { font-family: 'DM Serif Display', serif; font-size: 33px; color: var(--ink); margin-bottom: 13px; }
+    .success-text { font-size: 15px; color: var(--muted); max-width: 400px; line-height: 1.65; }
+    .success-actions {
+      display: flex; flex-direction: column; gap: 11px;
+      width: 100%; max-width: 320px; margin-top: 32px;
+    }
+    .btn-action {
+      font-family: 'DM Sans', sans-serif; font-size: 14.5px; font-weight: 500;
+      letter-spacing: 0.01em; border-radius: 100px; padding: 14px 24px; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
+    }
+    .btn-action-icon { font-size: 16px; }
+    .btn-action:active { transform: translateY(1px); }
+    .btn-action:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .btn-action-primary { background: var(--accent); color: #fff; border: 1px solid var(--accent); }
+    .btn-action-primary:hover { background: var(--accent-deep); border-color: var(--accent-deep); box-shadow: 0 8px 22px -10px rgba(111,87,51,0.6); }
+    .btn-action-ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+    .btn-action-ghost:hover { border-color: var(--accent); color: var(--accent-deep); }
+    .share-feedback {
+      font-size: 12.5px; color: var(--accent-deep); font-weight: 500;
+      margin-top: 2px; min-height: 16px; opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .share-feedback.show { opacity: 1; }
+
+    .success-brand { font-size: 12px; color: var(--muted); margin-top: 30px; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 480px) {
+      .main { padding: 0 16px 64px; }
+      .hero { padding: 44px 0 28px; }
+      .card { padding: 20px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .form-section { opacity: 1; transform: none; transition: none; }
+      .scroll-hint .arrow { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ STICKY HEADER ═══ -->
+<header class="site-header">
+  <span class="site-logo">AMUN Café</span>
+  <div class="lang-toggle" role="group" aria-label="Idioma / Language">
+    <button class="lang-btn active" id="btn-pt" onclick="setLang('pt')" aria-pressed="true">Português</button>
+    <button class="lang-btn" id="btn-en" onclick="setLang('en')" aria-pressed="false">English</button>
+  </div>
+</header>
+
+<!-- ═══ HIDDEN IFRAME for form submission ═══ -->
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none" title="submission target"></iframe>
+
+<!-- ═══ SUCCESS OVERLAY ═══ -->
+<div class="success-overlay" id="successOverlay" role="alert" aria-live="polite">
+  <div class="success-icon">☕</div>
+  <h2 class="success-title" data-pt="Obrigada!" data-en="Thank you!">Obrigada!</h2>
+  <p class="success-text" data-pt="A sua candidatura foi recebida com sucesso. Entraremos em contacto nos próximos dias para combinar os detalhes da visita ao AMUN Café." data-en="Your application has been received. We'll be in touch in the coming days to arrange the details of your visit to AMUN Café.">A sua candidatura foi recebida com sucesso. Entraremos em contacto nos próximos dias para combinar os detalhes da visita ao AMUN Café.</p>
+
+  <div class="success-actions">
+    <button type="button" class="btn-action btn-action-primary" id="btnShare" onclick="shareForm()">
+      <span class="btn-action-icon" aria-hidden="true">↗</span>
+      <span data-pt="Partilhar com outra influencer" data-en="Share with another influencer">Partilhar com outra influencer</span>
+    </button>
+    <button type="button" class="btn-action btn-action-ghost" id="btnRestart" onclick="restartForm()">
+      <span class="btn-action-icon" aria-hidden="true">↺</span>
+      <span data-pt="Voltar ao início" data-en="Back to start">Voltar ao início</span>
+    </button>
+    <span class="share-feedback" id="shareFeedback" role="status" aria-live="polite" data-pt="Link copiado!" data-en="Link copied!">Link copiado!</span>
+  </div>
+
+  <p class="success-brand">AMUN Café · Príncipe Real, Lisboa · @amuncafe.lisboa</p>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<main class="main" id="mainContent">
+
+  <!-- Hero -->
+  <div class="hero">
+    <span class="hero-tag" data-pt="Candidatura de criadores" data-en="Creator application">Candidatura de criadores</span>
+    <h1 class="hero-title" data-pt="Vamos criar algo juntos" data-en="Let's create something together">Vamos criar algo juntos</h1>
+    <p class="hero-sub" data-pt="Obrigada por considerar uma colaboração connosco. Preencha este formulário para podermos conhecer melhor o seu trabalho e combinar os detalhes da visita ao AMUN Café." data-en="Thank you for considering a collaboration with us. Fill in this form so we can learn more about your work and arrange the details of your visit to AMUN Café.">Obrigada por considerar uma colaboração connosco. Preencha este formulário para podermos conhecer melhor o seu trabalho e combinar os detalhes da visita ao AMUN Café.</p>
+    <span class="scroll-hint" aria-hidden="true"><span class="arrow">↓</span> <span data-pt="Começar" data-en="Start">Começar</span></span>
+  </div>
+
+  <!-- SECTION 1 — SOBRE SI -->
+  <section class="form-section" id="sec1">
+    <div class="section-header">
+      <div class="section-num" aria-hidden="true">1</div>
+      <span class="section-title" data-pt="Sobre si" data-en="About you">Sobre si</span>
+    </div>
+    <div class="card">
+      <div class="field-grid">
+        <div class="field-group" id="fg-name">
+          <label for="f-name" data-pt="Nome completo" data-en="Full name">Nome completo</label>
+          <input type="text" id="f-name" name="name" autocomplete="name"
+            data-pt-ph="O seu nome" data-en-ph="Your name" placeholder="O seu nome" />
+          <span class="error-msg" data-pt="Por favor insira o seu nome." data-en="Please enter your name.">Por favor insira o seu nome.</span>
+        </div>
+        <div class="field-group" id="fg-email">
+          <label for="f-email" data-pt="Email" data-en="Email">Email</label>
+          <input type="email" id="f-email" name="email" autocomplete="email"
+            data-pt-ph="o.seu@email.com" data-en-ph="your@email.com" placeholder="o.seu@email.com" />
+          <span class="error-msg" data-pt="Por favor insira um email válido." data-en="Please enter a valid email.">Por favor insira um email válido.</span>
+        </div>
+      </div>
+      <div class="field-grid" style="margin-top:16px">
+        <div class="field-group" id="fg-phone">
+          <label for="f-phone" data-pt="Telemóvel / WhatsApp" data-en="Mobile / WhatsApp">Telemóvel / WhatsApp</label>
+          <input type="tel" id="f-phone" name="phone" autocomplete="tel"
+            data-pt-ph="+351 900 000 000" data-en-ph="+351 900 000 000" placeholder="+351 900 000 000" />
+          <span class="error-msg" data-pt="Por favor insira o seu telemóvel." data-en="Please enter your phone number.">Por favor insira o seu telemóvel.</span>
+        </div>
+        <div class="field-group" id="fg-city">
+          <label for="f-city" data-pt="Cidade onde vive" data-en="City you live in">Cidade onde vive</label>
+          <input type="text" id="f-city" name="city" autocomplete="address-level2"
+            data-pt-ph="Lisboa" data-en-ph="Lisbon" placeholder="Lisboa" />
+          <span class="error-msg" data-pt="Por favor insira a sua cidade." data-en="Please enter your city.">Por favor insira a sua cidade.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2 — REDES SOCIAIS -->
+  <section class="form-section" id="sec2">
+    <div class="section-header">
+      <div class="section-num" aria-hidden="true">2</div>
+      <span class="section-title" data-pt="Redes sociais" data-en="Social media">Redes sociais</span>
+    </div>
+    <div class="card">
+      <div class="field-group" id="fg-instagram">
+        <label for="f-instagram" data-pt="Instagram @" data-en="Instagram @">Instagram @</label>
+        <input type="text" id="f-instagram" name="instagram"
+          data-pt-ph="o.seu.handle" data-en-ph="your.handle" placeholder="o.seu.handle" />
+        <span class="error-msg" data-pt="Por favor insira o seu handle do Instagram." data-en="Please enter your Instagram handle.">Por favor insira o seu handle do Instagram.</span>
+      </div>
+      <div class="field-grid" style="margin-top:16px">
+        <div class="field-group">
+          <label for="f-tiktok">TikTok @ <span class="label-optional" data-pt="(opcional)" data-en="(optional)">(opcional)</span></label>
+          <input type="text" id="f-tiktok" name="tiktok"
+            data-pt-ph="o.seu.handle" data-en-ph="your.handle" placeholder="o.seu.handle" />
+        </div>
+        <div class="field-group" id="fg-followers-ig">
+          <label for="f-followers-ig" data-pt="Seguidores Instagram" data-en="Instagram followers">Seguidores Instagram</label>
+          <input type="number" id="f-followers-ig" name="followers_ig" min="0"
+            data-pt-ph="ex: 12500" data-en-ph="e.g. 12500" placeholder="ex: 12500" />
+          <span class="error-msg" data-pt="Por favor indique o número de seguidores." data-en="Please enter your follower count.">Por favor indique o número de seguidores.</span>
+        </div>
+      </div>
+      <div class="field-grid" style="margin-top:16px">
+        <div class="field-group">
+          <label for="f-followers-tt">
+            <span data-pt="Seguidores TikTok" data-en="TikTok followers">Seguidores TikTok</span>
+            <span class="label-optional" data-pt="(opcional)" data-en="(optional)">(opcional)</span>
+          </label>
+          <input type="number" id="f-followers-tt" name="followers_tt" min="0"
+            data-pt-ph="ex: 8000" data-en-ph="e.g. 8000" placeholder="ex: 8000" />
+        </div>
+        <div class="field-group" id="fg-engagement">
+          <label for="f-engagement" data-pt="Taxa de engajamento média (%)" data-en="Average engagement rate (%)">Taxa de engajamento média (%)</label>
+          <input type="text" id="f-engagement" name="engagement"
+            data-pt-ph="ex: 4.5" data-en-ph="e.g. 4.5" placeholder="ex: 4.5" />
+          <span class="error-msg" data-pt="Por favor indique a taxa de engajamento." data-en="Please enter your engagement rate.">Por favor indique a taxa de engajamento.</span>
+        </div>
+      </div>
+      <div class="field-group" style="margin-top:16px">
+        <label for="f-portfolio">
+          <span data-pt="Link do portfólio ou media kit" data-en="Portfolio or media kit link">Link do portfólio ou media kit</span>
+          <span class="label-optional" data-pt="(opcional)" data-en="(optional)">(opcional)</span>
+        </label>
+        <input type="url" id="f-portfolio" name="portfolio"
+          data-pt-ph="https://..." data-en-ph="https://..." placeholder="https://..." />
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3 — SOBRE O SEU CONTEÚDO -->
+  <section class="form-section" id="sec3">
+    <div class="section-header">
+      <div class="section-num" aria-hidden="true">3</div>
+      <span class="section-title" data-pt="Sobre o seu conteúdo" data-en="About your content">Sobre o seu conteúdo</span>
+    </div>
+    <div class="card">
+      <div class="field-group">
+        <label data-pt="Que tipo de conteúdo cria?" data-en="What type of content do you create?">Que tipo de conteúdo cria?</label>
+        <div class="pill-group-wrap" style="margin-top:6px" id="pg-content-type">
+          <div class="pill-group" role="group" aria-label="Tipo de conteúdo">
+            <label class="pill-label"><input type="checkbox" name="content_type" value="Reels" /><span class="pill-text">Reels</span></label>
+            <label class="pill-label"><input type="checkbox" name="content_type" value="TikToks" /><span class="pill-text">TikToks</span></label>
+            <label class="pill-label"><input type="checkbox" name="content_type" value="Stories" /><span class="pill-text">Stories</span></label>
+            <label class="pill-label"><input type="checkbox" name="content_type" value="Feed Posts" /><span class="pill-text">Feed Posts</span></label>
+            <label class="pill-label"><input type="checkbox" name="content_type" value="Carrosséis" /><span class="pill-text" data-pt="Carrosséis" data-en="Carousels">Carrosséis</span></label>
+            <label class="pill-label"><input type="checkbox" name="content_type" value="Blog/Artigos" /><span class="pill-text" data-pt="Blog/Artigos" data-en="Blog/Articles">Blog/Artigos</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-top:20px" id="fg-niche">
+        <label for="f-niche" data-pt="Qual é o seu nicho principal?" data-en="What is your main niche?">Qual é o seu nicho principal?</label>
+        <select id="f-niche" name="niche">
+          <option value="" data-pt="Selecione uma opção" data-en="Select an option">Selecione uma opção</option>
+          <option value="Food & Gastronomia" data-pt="Food &amp; Gastronomia" data-en="Food &amp; Gastronomy">Food &amp; Gastronomia</option>
+          <option value="Lifestyle" data-pt="Lifestyle" data-en="Lifestyle">Lifestyle</option>
+          <option value="Wellness & Saúde" data-pt="Wellness &amp; Saúde" data-en="Wellness &amp; Health">Wellness &amp; Saúde</option>
+          <option value="Viagens" data-pt="Viagens" data-en="Travel">Viagens</option>
+          <option value="Design & Criatividade" data-pt="Design &amp; Criatividade" data-en="Design &amp; Creativity">Design &amp; Criatividade</option>
+          <option value="Moda" data-pt="Moda" data-en="Fashion">Moda</option>
+          <option value="Fitness" data-pt="Fitness" data-en="Fitness">Fitness</option>
+          <option value="Parentalidade" data-pt="Parentalidade" data-en="Parenting">Parentalidade</option>
+          <option value="Outro" data-pt="Outro" data-en="Other">Outro</option>
+        </select>
+        <span class="error-msg" data-pt="Por favor selecione o seu nicho." data-en="Please select your niche.">Por favor selecione o seu nicho.</span>
+      </div>
+
+      <div class="field-group" style="margin-top:16px">
+        <label for="f-example-collab">
+          <span data-pt="Exemplo de uma colaboração anterior" data-en="Example of a previous collaboration">Exemplo de uma colaboração anterior</span>
+          <span class="label-optional" data-pt="(URL, opcional)" data-en="(URL, optional)">(URL, opcional)</span>
+        </label>
+        <input type="url" id="f-example-collab" name="example_collab"
+          data-pt-ph="Link para um post, reel ou vídeo" data-en-ph="Link to a post, reel or video" placeholder="Link para um post, reel ou vídeo" />
+      </div>
+
+      <div class="field-group" style="margin-top:16px" id="fg-why-amun">
+        <label for="f-why-amun" data-pt="Porque quer colaborar com o AMUN Café?" data-en="Why do you want to collaborate with AMUN Café?">Porque quer colaborar com o AMUN Café?</label>
+        <textarea id="f-why-amun" name="why_amun" rows="4"
+          data-pt-ph="Conte-nos um pouco sobre si e o que o atrai nesta colaboração…" data-en-ph="Tell us a bit about yourself and what draws you to this collaboration…" placeholder="Conte-nos um pouco sobre si e o que o atrai nesta colaboração…"></textarea>
+        <span class="error-msg" data-pt="Por favor partilhe a sua motivação." data-en="Please share your motivation.">Por favor partilhe a sua motivação.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4 — DETALHES DA VISITA -->
+  <section class="form-section" id="sec4">
+    <div class="section-header">
+      <div class="section-num" aria-hidden="true">4</div>
+      <span class="section-title" data-pt="Detalhes da visita" data-en="Visit details">Detalhes da visita</span>
+    </div>
+    <div class="card">
+      <div class="field-group">
+        <label data-pt="Quantas pessoas vêm à visita?" data-en="How many people are coming?">Quantas pessoas vêm à visita?</label>
+        <div class="radio-cards-wrap" id="rw-guests" style="margin-top:8px">
+          <div class="radio-cards" role="radiogroup" aria-label="Número de convidados">
+            <label class="radio-card-label">
+              <input type="radio" name="guests" value="1 Sozinha/o" />
+              <div class="radio-card-inner">
+                <span class="radio-card-icon">🧍</span>
+                <span class="radio-card-num">1</span>
+                <span class="radio-card-text" data-pt="Sozinha/o" data-en="Solo">Sozinha/o</span>
+              </div>
+            </label>
+            <label class="radio-card-label">
+              <input type="radio" name="guests" value="2 A dois" />
+              <div class="radio-card-inner">
+                <span class="radio-card-icon">🧑‍🤝‍🧑</span>
+                <span class="radio-card-num">2</span>
+                <span class="radio-card-text" data-pt="A dois" data-en="As a pair">A dois</span>
+              </div>
+            </label>
+          </div>
+          <span class="radio-error-msg" data-pt="Por favor selecione o número de pessoas." data-en="Please select the number of guests.">Por favor selecione o número de pessoas.</span>
+        </div>
+      </div>
+
+      <div class="field-grid" style="margin-top:20px">
+        <div class="field-group" id="fg-date1">
+          <label for="f-date1" data-pt="Data preferida" data-en="Preferred date">Data preferida</label>
+          <input type="date" id="f-date1" name="preferred_date1" />
+          <span class="error-msg" data-pt="Por favor selecione uma data preferida." data-en="Please select a preferred date.">Por favor selecione uma data preferida.</span>
+        </div>
+        <div class="field-group">
+          <label for="f-date2">
+            <span data-pt="Data alternativa" data-en="Alternative date">Data alternativa</span>
+            <span class="label-optional" data-pt="(opcional)" data-en="(optional)">(opcional)</span>
+          </label>
+          <input type="date" id="f-date2" name="preferred_date2" />
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-top:16px" id="fg-time">
+        <label for="f-time" data-pt="Horário preferido" data-en="Preferred time">Horário preferido</label>
+        <select id="f-time" name="preferred_time">
+          <option value="" data-pt="Selecione um horário" data-en="Select a time slot">Selecione um horário</option>
+          <option value="Manhã 9h–12h" data-pt="Manhã · 9h–12h" data-en="Morning · 9am–12pm">Manhã · 9h–12h</option>
+          <option value="Almoço 12h–14h" data-pt="Almoço · 12h–14h" data-en="Lunchtime · 12pm–2pm">Almoço · 12h–14h</option>
+          <option value="Tarde 14h–17h" data-pt="Tarde · 14h–17h" data-en="Afternoon · 2pm–5pm">Tarde · 14h–17h</option>
+        </select>
+        <span class="error-msg" data-pt="Por favor selecione um horário." data-en="Please select a time slot.">Por favor selecione um horário.</span>
+      </div>
+
+      <div class="field-group" style="margin-top:16px">
+        <label for="f-dietary">
+          <span data-pt="Restrições alimentares" data-en="Dietary restrictions">Restrições alimentares</span>
+          <span class="label-optional" data-pt="(opcional)" data-en="(optional)">(opcional)</span>
+        </label>
+        <input type="text" id="f-dietary" name="dietary"
+          data-pt-ph="ex: vegetariano, sem glúten…" data-en-ph="e.g. vegetarian, gluten-free…" placeholder="ex: vegetariano, sem glúten…" />
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5 — ENTREGA DO MATERIAL -->
+  <section class="form-section" id="sec5">
+    <div class="section-header">
+      <div class="section-num" aria-hidden="true">5</div>
+      <span class="section-title" data-pt="Entrega do material" data-en="Content delivery">Entrega do material</span>
+    </div>
+    <div class="card">
+      <div class="info-box">
+        <span class="info-box-icon">✦</span>
+        <span data-pt="No AMUN Café, trabalhamos com base na confiança. Pedimos que o material seja publicado dentro do prazo combinado. Não pedimos exclusividade nem esperamos conteúdo perfeito — queremos que a experiência seja genuína e que o conteúdo reflita o vosso olhar sobre o AMUN Café." data-en="At AMUN Café, we work on the basis of trust. We ask that content be published within the agreed timeframe. We don't ask for exclusivity or expect perfect content — we want the experience to be genuine and the content to reflect your perspective on AMUN Café.">No AMUN Café, trabalhamos com base na confiança. Pedimos que o material seja publicado dentro do prazo combinado. Não pedimos exclusividade nem esperamos conteúdo perfeito — queremos que a experiência seja genuína e que o conteúdo reflita o vosso olhar sobre o AMUN Café.</span>
+      </div>
+
+      <div class="field-group">
+        <label data-pt="O que se compromete a entregar?" data-en="What do you commit to delivering?">O que se compromete a entregar?</label>
+        <div class="pill-group-wrap" style="margin-top:6px" id="pg-deliverable">
+          <div class="pill-group" role="group" aria-label="Entregáveis">
+            <label class="pill-label"><input type="checkbox" name="deliverable" value="1 Reel" /><span class="pill-text">1 Reel</span></label>
+            <label class="pill-label"><input type="checkbox" name="deliverable" value="1 TikTok" /><span class="pill-text">1 TikTok</span></label>
+            <label class="pill-label"><input type="checkbox" name="deliverable" value="2+ Stories" /><span class="pill-text">2+ Stories</span></label>
+            <label class="pill-label"><input type="checkbox" name="deliverable" value="1 Post feed" /><span class="pill-text" data-pt="1 Post feed" data-en="1 Feed post">1 Post feed</span></label>
+            <label class="pill-label"><input type="checkbox" name="deliverable" value="Carrossel" /><span class="pill-text" data-pt="Carrossel" data-en="Carousel">Carrossel</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-top:20px" id="fg-delivery-days">
+        <label for="f-delivery-days" data-pt="Em quantos dias após a visita publica o material?" data-en="How many days after the visit will you publish?">Em quantos dias após a visita publica o material?</label>
+        <select id="f-delivery-days" name="delivery_days">
+          <option value="" data-pt="Selecione o prazo" data-en="Select a timeframe">Selecione o prazo</option>
+          <option value="3 dias" data-pt="Até 3 dias" data-en="Within 3 days">Até 3 dias</option>
+          <option value="5 dias" data-pt="Até 5 dias" data-en="Within 5 days">Até 5 dias</option>
+          <option value="7 dias" data-pt="Até 7 dias" data-en="Within 7 days">Até 7 dias</option>
+          <option value="10 dias" data-pt="Até 10 dias" data-en="Within 10 days">Até 10 dias</option>
+        </select>
+        <span class="error-msg" data-pt="Por favor selecione o prazo de entrega." data-en="Please select a delivery timeframe.">Por favor selecione o prazo de entrega.</span>
+      </div>
+
+      <div class="field-group" style="margin-top:16px" id="fg-share-raw">
+        <label for="f-share-raw" data-pt="Aceita partilhar o material original connosco para repost?" data-en="Do you accept sharing raw content with us for repost?">Aceita partilhar o material original connosco para repost?</label>
+        <select id="f-share-raw" name="share_raw">
+          <option value="" data-pt="Selecione" data-en="Select">Selecione</option>
+          <option value="Sim sem problema" data-pt="Sim, sem problema" data-en="Yes, no problem">Sim, sem problema</option>
+          <option value="Sim com crédito" data-pt="Sim, mas com crédito sempre" data-en="Yes, but always with credit">Sim, mas com crédito sempre</option>
+          <option value="Prefiro não partilhar" data-pt="Prefiro não partilhar" data-en="I'd rather not share">Prefiro não partilhar</option>
+        </select>
+        <span class="error-msg" data-pt="Por favor selecione uma opção." data-en="Please select an option.">Por favor selecione uma opção.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6 — COMPROMISSO -->
+  <section class="form-section" id="sec6">
+    <div class="section-header">
+      <div class="section-num" aria-hidden="true">6</div>
+      <span class="section-title" data-pt="Compromisso e confiança" data-en="Commitment &amp; trust">Compromisso e confiança</span>
+    </div>
+    <div class="card">
+      <p class="agree-intro">
+        <span data-pt="Para fecharmos a parceria, precisamos que confirme os seguintes pontos." data-en="To finalise the partnership, please confirm the following points.">Para fecharmos a parceria, precisamos que confirme os seguintes pontos.</span><br />
+        <span data-pt="São a base da relação que queremos construir." data-en="These are the foundation of the relationship we want to build.">São a base da relação que queremos construir.</span>
+      </p>
+      <div class="agree-list">
+        <div class="agree-group" id="ag-1">
+          <label class="agree-item">
+            <input type="checkbox" name="agree_1" id="agree-1" />
+            <span class="agree-box" aria-hidden="true"></span>
+            <span class="agree-text" data-pt="Comprometo-me a publicar o material no prazo que selecionei acima." data-en="I commit to publishing the content within the timeframe I selected above.">Comprometo-me a publicar o material no prazo que selecionei acima.</span>
+          </label>
+          <span class="error-msg" data-pt="Este compromisso é necessário." data-en="This commitment is required.">Este compromisso é necessário.</span>
+        </div>
+        <div class="agree-group" id="ag-2">
+          <label class="agree-item">
+            <input type="checkbox" name="agree_2" id="agree-2" />
+            <span class="agree-box" aria-hidden="true"></span>
+            <span class="agree-text" data-pt="Vou identificar @amuncafe.lisboa em todo o conteúdo publicado (feeds, reels, stories, TikToks)." data-en="I will tag @amuncafe.lisboa in all published content (feeds, reels, stories, TikToks).">Vou identificar @amuncafe.lisboa em todo o conteúdo publicado (feeds, reels, stories, TikToks).</span>
+          </label>
+          <span class="error-msg" data-pt="Este compromisso é necessário." data-en="This commitment is required.">Este compromisso é necessário.</span>
+        </div>
+        <div class="agree-group" id="ag-3">
+          <label class="agree-item">
+            <input type="checkbox" name="agree_3" id="agree-3" />
+            <span class="agree-box" aria-hidden="true"></span>
+            <span class="agree-text" data-pt="O conteúdo será autêntico e honesto, refletindo a minha experiência real no AMUN Café." data-en="The content will be authentic and honest, reflecting my real experience at AMUN Café.">O conteúdo será autêntico e honesto, refletindo a minha experiência real no AMUN Café.</span>
+          </label>
+          <span class="error-msg" data-pt="Este compromisso é necessário." data-en="This commitment is required.">Este compromisso é necessário.</span>
+        </div>
+        <div class="agree-group" id="ag-4">
+          <label class="agree-item">
+            <input type="checkbox" name="agree_4" id="agree-4" />
+            <span class="agree-box" aria-hidden="true"></span>
+            <span class="agree-text" data-pt="Se houver algum imprevisto, aviso o AMUN Café com antecedência e combino um novo prazo." data-en="If anything unexpected comes up, I will notify AMUN Café in advance and agree on a new deadline.">Se houver algum imprevisto, aviso o AMUN Café com antecedência e combino um novo prazo.</span>
+          </label>
+          <span class="error-msg" data-pt="Este compromisso é necessário." data-en="This commitment is required.">Este compromisso é necessário.</span>
+        </div>
+
+        <div class="agree-group" id="ag-5">
+          <label class="agree-item">
+            <input type="checkbox" name="agree_5" id="agree-5" />
+            <span class="agree-box" aria-hidden="true"></span>
+            <span class="agree-text" data-pt="Comprometo-me a deixar uma avaliação no Google do AMUN Café após a visita." data-en="I commit to leaving a Google review of AMUN Café after my visit.">Comprometo-me a deixar uma avaliação no Google do AMUN Café após a visita.</span>
+          </label>
+          <span class="error-msg" data-pt="Este compromisso é necessário." data-en="This commitment is required.">Este compromisso é necessário.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7 — MAIS ALGUMA COISA? -->
+  <section class="form-section" id="sec7">
+    <div class="section-header">
+      <div class="section-num" aria-hidden="true">7</div>
+      <span class="section-title" data-pt="Mais alguma coisa?" data-en="Anything else?">Mais alguma coisa?</span>
+    </div>
+    <div class="card">
+      <div class="field-group">
+        <label for="f-notes">
+          <span data-pt="Notas ou observações" data-en="Notes or comments">Notas ou observações</span>
+          <span class="label-optional" data-pt="(opcional)" data-en="(optional)">(opcional)</span>
+        </label>
+        <textarea id="f-notes" name="notes" rows="3"
+          data-pt-ph="Algo que queira acrescentar ou que ache importante partilhar…" data-en-ph="Anything you'd like to add or that you feel is important to share…" placeholder="Algo que queira acrescentar ou que ache importante partilhar…"></textarea>
+      </div>
+      <div class="field-group" style="margin-top:16px">
+        <label for="f-how-found">
+          <span data-pt="Como conheceu o AMUN Café?" data-en="How did you discover AMUN Café?">Como conheceu o AMUN Café?</span>
+          <span class="label-optional" data-pt="(opcional)" data-en="(optional)">(opcional)</span>
+        </label>
+        <select id="f-how-found" name="how_found">
+          <option value="" data-pt="Selecione" data-en="Select">Selecione</option>
+          <option value="Instagram" data-pt="Instagram" data-en="Instagram">Instagram</option>
+          <option value="TikTok" data-pt="TikTok" data-en="TikTok">TikTok</option>
+          <option value="Google" data-pt="Google" data-en="Google">Google</option>
+          <option value="Recomendação" data-pt="Recomendação de alguém" data-en="Someone's recommendation">Recomendação de alguém</option>
+          <option value="Passou pela rua" data-pt="Passou pela rua" data-en="Walked past">Passou pela rua</option>
+          <option value="Outro" data-pt="Outro" data-en="Other">Outro</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SUBMIT ═══ -->
+  <div class="submit-wrap">
+    <button type="button" class="btn-submit" id="btnSubmit" onclick="handleSubmit()">
+      <div class="spinner"></div>
+      <span class="btn-text" data-pt="Enviar candidatura" data-en="Send application">Enviar candidatura</span>
+      <span class="btn-arrow" aria-hidden="true">→</span>
+    </button>
+    <p class="submit-note" data-pt="Ao enviar, concorda que os seus dados sejam usados apenas para a gestão desta parceria." data-en="By submitting, you agree your data is used only to manage this partnership.">Ao enviar, concorda que os seus dados sejam usados apenas para a gestão desta parceria.</p>
+  </div>
+
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="site-footer">
+  <span class="footer-brand">AMUN Café</span>
+  Príncipe Real, Lisboa · @amuncafe.lisboa<br />
+  <span data-pt="Os seus dados são utilizados apenas para gestão desta parceria." data-en="Your data is used solely for managing this partnership.">Os seus dados são utilizados apenas para gestão desta parceria.</span>
+</footer>
+
+<script>
+  /* ══════════════════════════════════════════
+     CONFIG
+     Cole aqui o URL /exec do Apps Script publicado
+     a partir da planilha (ver apps-script/Code.gs).
+  ══════════════════════════════════════════ */
+  const GOOGLE_SCRIPT_URL = 'PASTE_YOUR_EXEC_URL_HERE';
+
+  /* ══════════════════════════════════════════
+     LANGUAGE SYSTEM
+  ══════════════════════════════════════════ */
+  let currentLang = 'pt';
+
+  function setLang(lang) {
+    currentLang = lang;
+    document.querySelectorAll('[data-pt]').forEach(el => { el.textContent = el.dataset[lang]; });
+    document.querySelectorAll('[data-pt-ph]').forEach(el => { el.placeholder = el.dataset[lang + 'Ph']; });
+    document.querySelectorAll('option[data-pt]').forEach(opt => { opt.textContent = opt.dataset[lang]; });
+    document.documentElement.lang = lang === 'pt' ? 'pt-PT' : 'en';
+    document.getElementById('btn-pt').classList.toggle('active', lang === 'pt');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-pt').setAttribute('aria-pressed', lang === 'pt');
+    document.getElementById('btn-en').setAttribute('aria-pressed', lang === 'en');
+  }
+
+  /* ══════════════════════════════════════════
+     DATE MIN = TODAY
+  ══════════════════════════════════════════ */
+  (function setDateMin() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('f-date1').min = today;
+    document.getElementById('f-date2').min = today;
+  })();
+
+  /* ══════════════════════════════════════════
+     REAL-TIME ERROR CLEARING
+  ══════════════════════════════════════════ */
+  function clearError(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('has-error');
+  }
+
+  ['f-name','f-email','f-phone','f-city','f-instagram','f-followers-ig',
+   'f-engagement','f-niche','f-why-amun','f-date1','f-time',
+   'f-delivery-days','f-share-raw'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', () => clearError('fg-' + id.replace('f-','')));
+    el.addEventListener('change', () => clearError('fg-' + id.replace('f-','')));
+  });
+
+  document.querySelectorAll('input[name="guests"]').forEach(r => {
+    r.addEventListener('change', () => document.getElementById('rw-guests').classList.remove('has-error'));
+  });
+
+  [1,2,3,4,5].forEach(n => {
+    const el = document.getElementById('agree-' + n);
+    if (el) el.addEventListener('change', () => document.getElementById('ag-' + n).classList.remove('has-error'));
+  });
+
+  /* ══════════════════════════════════════════
+     VALIDATION
+  ══════════════════════════════════════════ */
+  function validate() {
+    let firstError = null;
+
+    function markError(id) {
+      const el = document.getElementById(id);
+      if (el) { el.classList.add('has-error'); if (!firstError) firstError = el; }
+    }
+    function markRadioError(wrapId) {
+      const el = document.getElementById(wrapId);
+      if (el) { el.classList.add('has-error'); if (!firstError) firstError = el; }
+    }
+
+    const name = document.getElementById('f-name').value.trim();
+    if (!name) markError('fg-name');
+
+    const email = document.getElementById('f-email').value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) markError('fg-email');
+
+    const phone = document.getElementById('f-phone').value.trim();
+    if (!phone) markError('fg-phone');
+
+    const city = document.getElementById('f-city').value.trim();
+    if (!city) markError('fg-city');
+
+    const instagram = document.getElementById('f-instagram').value.trim();
+    if (!instagram) markError('fg-instagram');
+
+    const followersIg = document.getElementById('f-followers-ig').value.trim();
+    if (!followersIg) markError('fg-followers-ig');
+
+    const niche = document.getElementById('f-niche').value;
+    if (!niche) markError('fg-niche');
+
+    const whyAmun = document.getElementById('f-why-amun').value.trim();
+    if (!whyAmun) markError('fg-why-amun');
+
+    const guestsChecked = document.querySelector('input[name="guests"]:checked');
+    if (!guestsChecked) markRadioError('rw-guests');
+
+    const date1 = document.getElementById('f-date1').value;
+    if (!date1) markError('fg-date1');
+
+    const time = document.getElementById('f-time').value;
+    if (!time) markError('fg-time');
+
+    const deliveryDays = document.getElementById('f-delivery-days').value;
+    if (!deliveryDays) markError('fg-delivery-days');
+
+    const shareRaw = document.getElementById('f-share-raw').value;
+    if (!shareRaw) markError('fg-share-raw');
+
+    [1,2,3,4,5].forEach(n => {
+      if (!document.getElementById('agree-' + n).checked) markError('ag-' + n);
+    });
+
+    return { valid: firstError === null, firstError };
+  }
+
+  /* ══════════════════════════════════════════
+     COLLECT FORM DATA
+  ══════════════════════════════════════════ */
+  function collectData() {
+    const get = id => document.getElementById(id).value.trim();
+    const getChecked = name => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value).join(', ');
+    const getRadio = name => { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : ''; };
+
+    return {
+      name:            get('f-name'),
+      email:           get('f-email'),
+      phone:           get('f-phone'),
+      city:            get('f-city'),
+      instagram:       get('f-instagram'),
+      tiktok:          get('f-tiktok'),
+      followers_ig:    get('f-followers-ig'),
+      followers_tt:    get('f-followers-tt'),
+      engagement:      get('f-engagement'),
+      portfolio:       get('f-portfolio'),
+      content_type:    getChecked('content_type'),
+      niche:           get('f-niche'),
+      example_collab:  get('f-example-collab'),
+      why_amun:        get('f-why-amun'),
+      guests:          getRadio('guests'),
+      preferred_date1: get('f-date1'),
+      preferred_date2: get('f-date2'),
+      preferred_time:  get('f-time'),
+      dietary:         get('f-dietary'),
+      deliverable:     getChecked('deliverable'),
+      delivery_days:   get('f-delivery-days'),
+      share_raw:       get('f-share-raw'),
+      notes:           get('f-notes'),
+      how_found:       get('f-how-found'),
+      submitted_at:    new Date().toISOString(),
+      language:        currentLang,
+    };
+  }
+
+  /* ══════════════════════════════════════════
+     FORM SUBMISSION via hidden iframe (sem CORS)
+  ══════════════════════════════════════════ */
+  function submitToGoogleSheets(data) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = GOOGLE_SCRIPT_URL;
+    form.target = 'hidden_iframe';
+
+    Object.entries(data).forEach(([key, val]) => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = val;
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+  }
+
+  function showSuccess() {
+    document.getElementById('successOverlay').classList.add('show');
+    document.getElementById('mainContent').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.querySelectorAll('#successOverlay [data-pt]').forEach(el => { el.textContent = el.dataset[currentLang]; });
+  }
+
+  /* ══════════════════════════════════════════
+     SUCCESS ACTIONS — partilhar / recomeçar
+  ══════════════════════════════════════════ */
+  function shareForm() {
+    const url = window.location.href.split('#')[0];
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(showShareFeedback).catch(() => legacyCopy(url));
+    } else {
+      legacyCopy(url);
+    }
+  }
+
+  function legacyCopy(url) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = url;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '-1000px';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (ok) { showShareFeedback(); return; }
+    } catch (e) { /* fall through */ }
+    try {
+      window.prompt(currentLang === 'pt' ? 'Copie o link do formulário:' : 'Copy the form link:', url);
+    } catch (e) { /* prompt unsupported — nothing else to do */ }
+  }
+
+  function showShareFeedback() {
+    const fb = document.getElementById('shareFeedback');
+    fb.textContent = fb.dataset[currentLang];
+    fb.classList.add('show');
+    clearTimeout(showShareFeedback._t);
+    showShareFeedback._t = setTimeout(() => fb.classList.remove('show'), 2600);
+  }
+
+  function restartForm() {
+    window.scrollTo({ top: 0 });
+    window.location.reload();
+  }
+
+  function handleSubmit() {
+    const { valid, firstError } = validate();
+    if (!valid) { firstError.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+
+    const btn = document.getElementById('btnSubmit');
+    btn.classList.add('loading');
+    btn.disabled = true;
+    btn.querySelector('.btn-text').textContent = currentLang === 'pt' ? 'A enviar…' : 'Sending…';
+
+    const data = collectData();
+    const configured = GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL.indexOf('PASTE_YOUR') === -1;
+    if (configured) submitToGoogleSheets(data);
+
+    setTimeout(showSuccess, configured ? 2000 : 600);
+  }
+
+  /* ══════════════════════════════════════════
+     INTERSECTION OBSERVER — FADE IN SECTIONS
+  ══════════════════════════════════════════ */
+  (function initAnimations() {
+    const sections = document.querySelectorAll('.form-section');
+    const hero = document.querySelector('.hero');
+
+    if (hero) {
+      hero.style.opacity = '0';
+      hero.style.transform = 'translateY(14px)';
+      hero.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      requestAnimationFrame(() => { hero.style.opacity = '1'; hero.style.transform = 'translateY(0)'; });
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    sections.forEach((sec, i) => { sec.style.transitionDelay = (i * 0.04) + 's'; observer.observe(sec); });
+  })();
+
+  /* ══════════════════════════════════════════
+     INIT
+  ══════════════════════════════════════════ */
+  setLang('pt');
+</script>
+</body>
+</html>
